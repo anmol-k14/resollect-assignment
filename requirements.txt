@@ -1,0 +1,11 @@
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+sqlalchemy==2.0.23
+psycopg2-binary==2.9.9
+alembic==1.12.1
+pydantic==2.5.2
+pydantic-settings
+python-multipart==0.0.6
+celery==5.3.6
+redis==5.0.1
+zipfile-deflate64  # Good for robust zipping if standard lib fails on some weird zips, but standard is usually fine. using standard zipfile in python.

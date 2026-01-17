@@ -1,0 +1,30 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies (including LibreOffice and Supervisor)
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libpq-dev \
+    libreoffice-java-common \
+    default-jre \
+    libreoffice-writer \
+    libreoffice-impress \
+    libreoffice-common \
+    fonts-opensymbol \
+    supervisor \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+# Create storage directories
+RUN mkdir -p /app/storage/uploads /app/storage/processing /app/storage/outputs && chmod -R 777 /app/storage
+
+# Env var for PORT (Render sets this, defaulting to 10000 often, but we can respect it)
+ENV PORT=8000
+
+# Start Supervisor
+CMD ["/usr/bin/supervisord", "-c", "/app/app/supervisord.conf"]

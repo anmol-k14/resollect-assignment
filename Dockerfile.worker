@@ -1,0 +1,44 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install LibreOffice and other dependencies
+# default-jre is often needed for some LO features, though headless might work without it.
+# We include it to be safe.
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libpq-dev \
+    libreoffice-java-common \
+    default-jre \
+    libreoffice-writer \
+    libreoffice-impress \
+    libreoffice-common \
+    fonts-opensymbol \
+    hyphen-fr \
+    hyphen-de \
+    hyphen-en-us \
+    hyphen-it \
+    hyphen-ru \
+    fonts-dejavu \
+    fonts-dejavu-core \
+    fonts-dejavu-extra \
+    fonts-droid-fallback \
+    fonts-dustin \
+    fonts-f500 \
+    fonts-fanwood \
+    fonts-freefont-ttf \
+    fonts-liberation \
+    fonts-lmodern \
+    fonts-lyx \
+    fonts-sil-gentium \
+    fonts-texgyre \
+    fonts-tlwg-purisa \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+# Worker start command is handled in docker-compose, but providing default here
+CMD ["celery", "-A", "app.worker.celery_app", "worker", "--loglevel=info"]
