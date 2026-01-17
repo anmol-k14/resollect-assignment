@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import List, Optional
 from datetime import datetime
 from uuid import UUID
@@ -17,7 +17,7 @@ class JobCreateResponse(BaseModel):
     file_count: int
 
 class JobStatusResponse(BaseModel):
-    job_id: UUID
+    id: UUID = Field(serialization_alias="job_id")
     status: JobStatus
     created_at: datetime
     completed_at: Optional[datetime] = None
