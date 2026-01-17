@@ -21,23 +21,7 @@ This service is designed as an asynchronous microservice using **FastAPI** for t
 ## Architecture Diagrams
 
 ### System Design
-```mermaid
-graph TD
-    User[User] -->|Upload Zip| API[FastAPI Service]
-    API -->|Save Files| Vol[Shared Volume]
-    API -->|Create Job| DB[(PostgreSQL)]
-    API -->|Enqueue Task| Redis[(Redis Queue)]
-    
-    subgraph "Background Processing"
-        Worker[Celery Worker] -->|Fetch Task| Redis
-        Worker -->|Read DOCX| Vol
-        Worker -->|Convert to PDF| Vol
-        Worker -->|Update Status| DB
-    end
-    
-    User -->|Check Status| API
-    User -->|Download Zip| API
-```
+![System Architecture](./diagram/HLD.png)
 
 ### Sequence Flow
 ```mermaid
